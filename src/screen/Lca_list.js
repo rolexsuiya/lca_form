@@ -50,85 +50,6 @@ const LcaList = () => {
 
   let navigate = useNavigate();
 
-  // const arrayData = [
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  //   {
-  //     name: "LCA_17 Dec 21_0354",
-  //     case_number: "LCA_17 Dec 21_0354",
-  //     role: "Associate",
-  //     state: "Ghana",
-  //     city: "Ghana",
-  //     status: "Utilized Lca",
-  //     email: "Email update",
-  //     add: "add",
-  //     dustbin: "delete",
-  //   },
-  // ];
   const List = styled("ul")({
     listStyle: "none",
     padding: 0,
@@ -299,7 +220,7 @@ const LcaList = () => {
                 <StylePagination
                   rowsPerPageOptions={[7, 14, 23]}
                   component="div"
-                  count={7}
+                  count={Math.ceil(data?.length / rowsPerPage)}
                   page={myPage}
                   onPageChange={handleChangePage}
                   rowsPerPage={rowsPerPage}
