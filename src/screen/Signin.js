@@ -65,7 +65,6 @@ const SignIn = () => {
     }
     if (error.password && error.email) {
       setOpen(true);
-      // alert("Please Enter Email and Password");
     }
     setData({ ...data, error });
 

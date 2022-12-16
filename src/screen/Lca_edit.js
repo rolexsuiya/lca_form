@@ -1,8 +1,10 @@
 import {
+  Alert,
   AppBar,
   Box,
   Button,
   Grid,
+  Snackbar,
   Stack,
   styled,
   TextField,
@@ -116,60 +118,75 @@ const LcaEdit = () => {
     const error = { ...data?.error };
     if (data?.clasfition?.length === 0 || data?.clasfition === null) {
       isValid = false;
+      setOpen(true)
       error["clasfition"] = true;
     }
     if (data?.role?.length === 0 || data?.role === null) {
       isValid = false;
+      setOpen(true)
       error["role"] = true;
     }
     if (data?.location?.length === 0 || data?.location === null) {
       isValid = false;
+      setOpen(true)
       error["location"] = true;
     }
     if (data?.empNum?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["empNum"] = true;
     }
     if (data?.EName?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["EName"] = true;
     }
     if (data?.empCode?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["empCode"] = true;
     }
     if (data?.empMail?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["empMail"] = true;
     }
     if (data?.country?.length === 0 || data?.country === null) {
       isValid = false;
+      setOpen(true)
       error["country"] = true;
     }
     if (data?.visa?.length === 0 || data?.visa === null) {
       isValid = false;
+      setOpen(true)
       error["visa"] = true;
     }
     if (data?.assignment?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["assignment"] = true;
     }
     if (data?.permit?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["permit"] = true;
     }
     if (data?.startDate?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["startDate"] = true;
     }
     if (data?.endDate?.length === 0) {
       isValid = false;
+      setOpen(true)
       error["endDate"] = true;
     }
     if (data?.visaNum?.length === 0 || data?.visaNum === null) {
       isValid = false;
+      setOpen(true)
       error["visaNum"] = true;
     }
+
     setData({
       ...data,
       error: error,
@@ -216,6 +233,18 @@ const LcaEdit = () => {
     setValue(newValue);
   };
 
+
+  const [open, setOpen] = React.useState(false);
+  const handleClick = () => {
+    setOpen(true);
+  };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+ 
   return (
     <>
       <Stack>
@@ -234,6 +263,20 @@ const LcaEdit = () => {
         </AppBar>
       </Stack>
       <Box padding={4} sx={{ paddingBottom: "100px" }}>
+      <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+          >
+            <Alert
+              onClose={handleClose}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              Kindly Fill all the Mandatory Fields Highlighted in!
+            </Alert>
+          </Snackbar>
         <Grid container spacing={4} sx={{ marginBottom: "23px" }}>
           <Grid item xs={12} sm={6} md={4} lg={4}>
             <Box display="flex" direction="row" justifyContent="space-between">

@@ -48,6 +48,65 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const LcaList = () => {
   const [data, setData] = useState(null);
 
+  const [orderColumn, setorderColumn] = useState("EName");
+  const [orderType, setOrderType] = useState("asc");
+
+  const sortTablecloum = (columnKey, type) => {
+    // "role" === "EName";
+    if (columnKey === orderColumn) {
+      setOrderType(orderType === "asc" ? "desc" : "asc");
+      setorderColumn(columnKey);
+    } else {
+      setOrderType("asc");
+      setorderColumn(columnKey);
+    }
+    if (orderType === "asc") {
+      if (type === "string") {
+        let sortedData = data.sort((value1, value2) =>
+          value2[orderColumn] < value1[orderColumn]
+            ? 1
+            : value2[orderColumn] > value1[orderColumn]
+            ? -1
+            : 0
+        );
+
+        setData(sortedData);
+      } else if (type === "object") {
+        let sortedData = data.sort((value1, value2) =>
+          value2[orderColumn]["label"] < value1[orderColumn]["label"]
+            ? 1
+            : value2[orderColumn]["label"] > value1[orderColumn]["label"]
+            ? -1
+            : 0
+        );
+
+        setData(sortedData);
+      }
+    } else if (orderType === "desc") {
+      if (type === "string") {
+        let sortedData = data.sort((value1, value2) =>
+          value1[orderColumn] < value2[orderColumn]
+            ? 1
+            : value1[orderColumn] > value2[orderColumn]
+            ? -1
+            : 0
+        );
+
+        setData(sortedData);
+      } else if (type === "object") {
+        let sortedData = data.sort((value1, value2) =>
+          value1[orderColumn]["label"] < value2[orderColumn]["label"]
+            ? 1
+            : value1[orderColumn]["label"] > value2[orderColumn]["label"]
+            ? -1
+            : 0
+        );
+
+        setData(sortedData);
+      }
+    }
+  };
+
   let navigate = useNavigate();
 
   const List = styled("ul")({
@@ -100,7 +159,7 @@ const LcaList = () => {
   };
 
   const preBtn = () => {
-    if (myPage * rowsPerPage > 0) {
+    if (myPage > 0) {
       setPage((pre) => pre - 1);
     }
   };
@@ -120,9 +179,6 @@ const LcaList = () => {
             <Button href="/LcaEdit" variant="contained">
               ADD NEW
             </Button>
-            {/* <Typography variant="h6" color="primary" component="div">
-              ADD NEW
-            </Typography> */}
           </Box>
         </AppBar>
 
@@ -131,33 +187,56 @@ const LcaList = () => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("clasfition", "object")}
+                  >
                     LCA Number&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("EName", "string")}
+                    align="left"
+                  >
                     ETA Name&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("role", "object")}
+                    align="left"
+                  >
                     Job Role&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("country", "object")}
+                    align="left"
+                  >
                     State&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("location", "object")}
+                    align="left"
+                  >
                     City&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("visa", "object")}
+                    align="left"
+                  >
                     Status&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="left">
+                  <StyledTableCell
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => sortTablecloum("empMail", "string")}
+                    align="left"
+                  >
                     Email&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Edit&nbsp;&uarr;&darr;
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    Delete&nbsp;&uarr;&darr;
-                  </StyledTableCell>
+                  <StyledTableCell align="center">Edit</StyledTableCell>
+                  <StyledTableCell align="center">Delete</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
