@@ -23,6 +23,19 @@ import { toast, Toaster } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import uuid from "react-uuid";
 
+const StyledButton = styled(Button)(({ theme }) => ({
+  padding: theme.spacing(1),
+  [theme.breakpoints.down("sm")]: {
+    padding: "5px 10px 5px 10px",
+  },
+  [theme.breakpoints.up("md")]: {
+    padding: "10px 20px 10px 20px",
+  },
+  [theme.breakpoints.up("lg")]: {
+    padding: "10px 20px 10px 20px",
+  },
+}));
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -651,7 +664,7 @@ const LcaEdit = () => {
         columnGap={3}
       >
         <Grid item sx={2}>
-          <Button
+          <StyledButton
             href="/LcaList"
             variant="outlined"
             sx={{
@@ -660,10 +673,10 @@ const LcaEdit = () => {
             }}
           >
             Cancel
-          </Button>
+          </StyledButton>
         </Grid>
         <Grid item sx={2}>
-          <Button
+          <StyledButton
             onClick={() => handeleSumit()}
             variant="contained"
             type="submit"
@@ -672,7 +685,7 @@ const LcaEdit = () => {
             }}
           >
             {data?.id?.length > 0 ? "Update" : "Submit"}
-          </Button>
+          </StyledButton>
         </Grid>
       </Grid>
     </>
