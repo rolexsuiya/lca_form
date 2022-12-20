@@ -16,6 +16,7 @@ import { Button, Grid } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -48,61 +49,70 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const LcaList = () => {
   const [data, setData] = useState(null);
 
-  const [orderColumn, setorderColumn] = useState("EName");
+  const [orderColumn, setorderColumn] = useState("empMail");
   const [orderType, setOrderType] = useState("asc");
 
-  const sortTablecloum = (columnKey, type) => {
+  const sortTablecloum = async (columnKey, type) => {
     // "role" === "EName";
     if (columnKey === orderColumn) {
+      const response = await sortTablecloumn(
+        orderType === "asc" ? "desc" : "asc",
+        columnKey,
+        type
+      );
+      debugger;
       setOrderType(orderType === "asc" ? "desc" : "asc");
       setorderColumn(columnKey);
     } else {
+      const response = await sortTablecloumn("asc", columnKey, type);
+      debugger;
       setOrderType("asc");
       setorderColumn(columnKey);
     }
-    if (orderType === "asc") {
+  };
+
+  const sortTablecloumn = (order, columnKey, type) => {
+    if (order === "asc") {
       if (type === "string") {
         let sortedData = data.sort((value1, value2) =>
-          value2[orderColumn] < value1[orderColumn]
+          value2[columnKey] < value1[columnKey]
             ? 1
-            : value2[orderColumn] > value1[orderColumn]
+            : value2[columnKey] > value1[columnKey]
             ? -1
             : 0
         );
 
-        setData(sortedData);
+        return sortedData;
       } else if (type === "object") {
         let sortedData = data.sort((value1, value2) =>
-          value2[orderColumn]["label"] < value1[orderColumn]["label"]
+          value2[columnKey]["label"] < value1[columnKey]["label"]
             ? 1
-            : value2[orderColumn]["label"] > value1[orderColumn]["label"]
+            : value2[columnKey]["label"] > value1[columnKey]["label"]
             ? -1
             : 0
         );
-
-        setData(sortedData);
+        return sortedData;
       }
-    } else if (orderType === "desc") {
+    } else if (order === "desc") {
       if (type === "string") {
         let sortedData = data.sort((value1, value2) =>
-          value1[orderColumn] < value2[orderColumn]
+          value1[columnKey] < value2[columnKey]
             ? 1
-            : value1[orderColumn] > value2[orderColumn]
+            : value1[columnKey] > value2[columnKey]
             ? -1
             : 0
         );
 
-        setData(sortedData);
+        return sortedData;
       } else if (type === "object") {
         let sortedData = data.sort((value1, value2) =>
-          value1[orderColumn]["label"] < value2[orderColumn]["label"]
+          value1[columnKey]["label"] < value2[columnKey]["label"]
             ? 1
-            : value1[orderColumn]["label"] > value2[orderColumn]["label"]
+            : value1[columnKey]["label"] > value2[columnKey]["label"]
             ? -1
             : 0
         );
-
-        setData(sortedData);
+        return sortedData;
       }
     }
   };
@@ -125,12 +135,11 @@ const LcaList = () => {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value));
+    setRowsPerPage(+event.target.value);
     setPage(0);
   };
   useEffect(() => {
     let data = localStorage.getItem("showList");
-
     let mapData = JSON.parse(data);
     setData(mapData);
   }, []);
@@ -140,7 +149,7 @@ const LcaList = () => {
     let deleteData = JSON.parse(dele);
     let deleted = deleteData.filter((row) => row?.id != id);
     localStorage.setItem("showList", JSON.stringify(deleted));
-
+    toast.success("data deleted Successfully");
     setData(deleted);
   };
 
@@ -166,6 +175,7 @@ const LcaList = () => {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
+        <Toaster />
         <AppBar position="static" color="secondary">
           <Box
             display="flex"
@@ -188,12 +198,14 @@ const LcaList = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell
+                    key={1}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("clasfition", "object")}
                   >
                     LCA Number&nbsp;&uarr;&darr;
                   </StyledTableCell>
                   <StyledTableCell
+                    key={2}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("EName", "string")}
                     align="left"
@@ -201,6 +213,7 @@ const LcaList = () => {
                     ETA Name&nbsp;&uarr;&darr;
                   </StyledTableCell>
                   <StyledTableCell
+                    key={3}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("role", "object")}
                     align="left"
@@ -208,6 +221,7 @@ const LcaList = () => {
                     Job Role&nbsp;&uarr;&darr;
                   </StyledTableCell>
                   <StyledTableCell
+                    key={4}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("country", "object")}
                     align="left"
@@ -215,6 +229,7 @@ const LcaList = () => {
                     State&nbsp;&uarr;&darr;
                   </StyledTableCell>
                   <StyledTableCell
+                    key={5}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("location", "object")}
                     align="left"
@@ -222,6 +237,7 @@ const LcaList = () => {
                     City&nbsp;&uarr;&darr;
                   </StyledTableCell>
                   <StyledTableCell
+                    key={6}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("visa", "object")}
                     align="left"
@@ -229,14 +245,19 @@ const LcaList = () => {
                     Status&nbsp;&uarr;&darr;
                   </StyledTableCell>
                   <StyledTableCell
+                    key={7}
                     sx={{ cursor: "pointer" }}
                     onClick={() => sortTablecloum("empMail", "string")}
                     align="left"
                   >
                     Email&nbsp;&uarr;&darr;
                   </StyledTableCell>
-                  <StyledTableCell align="center">Edit</StyledTableCell>
-                  <StyledTableCell align="center">Delete</StyledTableCell>
+                  <StyledTableCell key={8} align="center">
+                    Edit
+                  </StyledTableCell>
+                  <StyledTableCell key={9} align="center">
+                    Delete
+                  </StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -246,9 +267,13 @@ const LcaList = () => {
                       myPage * rowsPerPage,
                       myPage * rowsPerPage + rowsPerPage
                     )
-                    ?.map((row) => (
+                    .map((row) => (
                       <StyledTableRow key={row?.id}>
-                        <StyledTableCell component="th" scope="row">
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          key={row?.id}
+                        >
                           {row?.clasfition?.label}
                         </StyledTableCell>
                         <StyledTableCell align="left">
@@ -288,6 +313,7 @@ const LcaList = () => {
               </TableBody>
             </Table>
           </TableContainer>
+
           <Grid container>
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <Box
@@ -297,12 +323,12 @@ const LcaList = () => {
                 mt={2}
               >
                 <StylePagination
-                  rowsPerPageOptions={[7, 14, 23]}
+                  rowsPerPageOptions={[5, 10, 15]}
                   component="div"
-                  count={Math.ceil(data?.length / rowsPerPage)}
+                  count={data?.length}
+                  rowsPerPage={rowsPerPage}
                   page={myPage}
                   onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Box>

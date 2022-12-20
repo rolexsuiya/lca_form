@@ -1,13 +1,15 @@
 import React from "react";
+import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LcaEdit from "./screen/Lca_edit";
+import LcaList from "./screen/Lca_list";
 import ResetSign from "./screen/ResetSign";
 import SignIn from "./screen/Signin";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LcaList from "./screen/Lca_list";
-import LcaEdit from "./screen/Lca_edit";
 
 function App() {
   return (
     <>
+      <Toaster />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SignIn />} />

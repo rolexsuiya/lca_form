@@ -1,3 +1,4 @@
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   Alert,
   AppBar,
@@ -10,19 +11,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Autocomplete from "@mui/material/Autocomplete";
+import Paper from "@mui/material/Paper";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import React, { useEffect, useState } from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Paper from "@mui/material/Paper";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import dayjs from "dayjs";
-import nextId from "react-id-generator";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
+import uuid from "react-uuid";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -60,9 +59,9 @@ const StyleTab = styled(Tab)({
 
 const LcaEdit = () => {
   const [value, setValue] = React.useState(0);
-  let idStud = nextId();
+  let idStud = uuid();
   let navigate = useNavigate();
-  let editData = useLocation();
+  let location = useLocation();
 
   const [data, setData] = useState({
     clasfition: "",
@@ -79,6 +78,7 @@ const LcaEdit = () => {
     startDate: "",
     endDate: "",
     visaNum: "",
+    id: "",
 
     error: {
       clasfition: "",
@@ -118,72 +118,72 @@ const LcaEdit = () => {
     const error = { ...data?.error };
     if (data?.clasfition?.length === 0 || data?.clasfition === null) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["clasfition"] = true;
     }
     if (data?.role?.length === 0 || data?.role === null) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["role"] = true;
     }
     if (data?.location?.length === 0 || data?.location === null) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["location"] = true;
     }
     if (data?.empNum?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["empNum"] = true;
     }
     if (data?.EName?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["EName"] = true;
     }
     if (data?.empCode?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["empCode"] = true;
     }
     if (data?.empMail?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["empMail"] = true;
     }
     if (data?.country?.length === 0 || data?.country === null) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["country"] = true;
     }
     if (data?.visa?.length === 0 || data?.visa === null) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["visa"] = true;
     }
     if (data?.assignment?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["assignment"] = true;
     }
     if (data?.permit?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["permit"] = true;
     }
     if (data?.startDate?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["startDate"] = true;
     }
     if (data?.endDate?.length === 0) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["endDate"] = true;
     }
     if (data?.visaNum?.length === 0 || data?.visaNum === null) {
       isValid = false;
-      setOpen(true)
+      setOpen(true);
       error["visaNum"] = true;
     }
 
@@ -194,16 +194,13 @@ const LcaEdit = () => {
     return isValid;
   };
   useEffect(() => {
-    if (editData?.state?.row?.id?.length > 0) {
-      setData(editData?.state?.row);
+    if (location?.state?.row?.id?.length > 0) {
+      setData(location?.state?.row);
     }
-  }, [editData?.state?.row?.id]);
+  }, [location?.state?.row?.id]);
 
   const handeleSumit = () => {
-    console.log(data);
     if (validateForm()) {
-      console.log(data);
-      console.log("calling");
       if (data.id) {
         let editId = data?.id;
 
@@ -214,7 +211,7 @@ const LcaEdit = () => {
         if (index !== -1) {
           oldData[index] = data;
           localStorage.setItem("showList", JSON.stringify(oldData));
-
+          toast.success("Successfully Updated");
           navigate("/LcaList");
         }
       } else if (data) {
@@ -224,6 +221,7 @@ const LcaEdit = () => {
 
         oldData.push(data);
         localStorage.setItem("showList", JSON.stringify(oldData));
+        toast.success("Successfully Created");
         navigate("/LcaList");
       }
     }
@@ -232,7 +230,6 @@ const LcaEdit = () => {
   const handleChange = (event = "React.SyntheticEvent", newValue = 0) => {
     setValue(newValue);
   };
-
 
   const [open, setOpen] = React.useState(false);
   const handleClick = () => {
@@ -244,7 +241,7 @@ const LcaEdit = () => {
     }
     setOpen(false);
   };
- 
+
   return (
     <>
       <Stack>
@@ -256,27 +253,37 @@ const LcaEdit = () => {
               aria-label="Tabs where selection follows focus"
               selectionFollowsFocus
             >
-              <StyleTab label="LCA Info" sx={{ marginLeft: "30px" }} />
+              <StyleTab label="LCA Info" />
               <StyleTab label="Location & Posting Info" />
             </Tabs>
           </Box>
         </AppBar>
       </Stack>
       <Box padding={4} sx={{ paddingBottom: "100px" }}>
-      <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            open={open}
-            autoHideDuration={6000}
-            onClose={handleClose}
-          >
-            <Alert
-              onClose={handleClose}
-              severity="error"
-              sx={{ width: "100%" }}
-            >
-              Kindly Fill all the Mandatory Fields Highlighted in!
-            </Alert>
-          </Snackbar>
+        <Toaster
+          toastOptions={{
+            success: {
+              style: {
+                color: "green",
+              },
+            },
+            error: {
+              style: {
+                color: "red",
+              },
+            },
+          }}
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            Kindly Fill all the Mandatory Fields Highlighted in!
+          </Alert>
+        </Snackbar>
         <Grid container spacing={4} sx={{ marginBottom: "23px" }}>
           <Grid item xs={12} sm={6} md={4} lg={4}>
             <Box display="flex" direction="row" justifyContent="space-between">
@@ -364,9 +371,14 @@ const LcaEdit = () => {
         ></Grid>
         <Grid container spacing={4} sx={{ marginBottom: "23px" }}>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">
-              EMPLOYEE NUMBER
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                EMPLOYEE NUMBER
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledText
               value={data?.empNum}
               placeholder="Enter Employee Number"
@@ -381,9 +393,14 @@ const LcaEdit = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">
-              EMPLOYEE FULL NAME
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                EMPLOYEE FULL NAME
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledText
               size="small"
               type="text"
@@ -397,7 +414,14 @@ const LcaEdit = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">EMPLOYEE CODE</StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                EMPLOYEE CODE
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledText
               value={data?.empCode}
               placeholder="Enter Empyole Code"
@@ -409,9 +433,14 @@ const LcaEdit = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">
-              OFFICAL EMAIL ID
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                OFFICAL EMAIL ID
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledText
               value={data?.empMail}
               placeholder="Enter Offical email ID"
@@ -440,9 +469,14 @@ const LcaEdit = () => {
         ></Grid>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">
-              DESTINATION COUNTRY
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                DESTINATION COUNTRY
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <Autocomplete
               disablePortal
               size="small"
@@ -461,7 +495,12 @@ const LcaEdit = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">VISA TYPE</StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">VISA TYPE</StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <Autocomplete
               disablePortal
               size="small"
@@ -480,9 +519,14 @@ const LcaEdit = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">
-              ASSIGNMENT REQUEST
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                ASSIGNMENT REQUEST
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledText
               placeholder="Enter Assignment Request No"
               sx={{ width: "100%" }}
@@ -494,9 +538,14 @@ const LcaEdit = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3} lg={3}>
-            <StyleTypo color="secondary.contrastText">
-              WORK PERMIT REQUEST
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                WORK PERMIT REQUEST
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledText
               placeholder="Enter Work Permit Request No"
               sx={{ width: "100%" }}
@@ -510,10 +559,14 @@ const LcaEdit = () => {
         </Grid>
         <Grid container spacing={4} sx={{ marginTop: "2px" }}>
           <Grid item xs={12} sm={6} md={4} lg={4}>
-            <StyleTypo color="secondary.contrastText">
-              WORK PERMIT START DATE
-            </StyleTypo>
-
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                WORK PERMIT START DATE
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <StyledDate dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
                 value={data?.startDate}
@@ -532,10 +585,14 @@ const LcaEdit = () => {
             </StyledDate>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={4}>
-            <StyleTypo color="secondary.contrastText">
-              WORK PERMIT END DATE
-            </StyleTypo>
-
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                WORK PERMIT END DATE
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <LocalizationProvider dateAdapter={AdapterDayjs} size="small">
               <DesktopDatePicker
                 value={data?.endDate}
@@ -553,9 +610,14 @@ const LcaEdit = () => {
             </LocalizationProvider>
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4}>
-            <StyleTypo color="secondary.contrastText">
-              VISA REQUEST NUMBER
-            </StyleTypo>
+            <Box display="flex" direction="row">
+              <StyleTypo color="secondary.contrastText">
+                VISA REQUEST NUMBER
+              </StyleTypo>
+              <Typography color="error" variant="caption">
+                &nbsp;*
+              </Typography>
+            </Box>
             <Autocomplete
               disablePortal
               size="small"
@@ -609,7 +671,7 @@ const LcaEdit = () => {
               padding: "10px 20px 10px 20px",
             }}
           >
-            Submit
+            {data?.id?.length > 0 ? "Update" : "Submit"}
           </Button>
         </Grid>
       </Grid>

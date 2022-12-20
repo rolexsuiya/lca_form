@@ -5,13 +5,13 @@ import {
   InputAdornment,
   Link,
   Paper,
-  Snackbar,
   Stack,
   styled,
   TextField,
   Typography,
 } from "@mui/material";
 import DraftsIcon from "@mui/icons-material/Drafts";
+import { toast, Toaster } from "react-hot-toast";
 import LockIcon from "@mui/icons-material/Lock";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -61,28 +61,22 @@ const SignIn = () => {
       regexEmail.test(data?.email) === true &&
       data?.password
     ) {
+      toast.success("Successfully login");
       navigate("/LcaList");
     }
-    if (error.password && error.email) {
-      setOpen(true);
+    if (error?.password && error?.email) {
+      toast.error("Please Enter Email and Password!");
     }
+    if (error?.password && error?.email?.length === 0) {
+      toast.error("Please Enter Password!");
+    }
+    if (error?.email && error?.password?.length === 0) {
+      toast.error("Please Enter Email!");
+    }
+
     setData({ ...data, error });
 
     return isValid;
-  };
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
   };
 
   const handeleSumit = () => {
@@ -109,20 +103,6 @@ const SignIn = () => {
     >
       <Paper elevation={3} sx={{ padding: "35px" }}>
         <Stack>
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            open={open}
-            autoHideDuration={6000}
-            onClose={handleClose}
-          >
-            <Alert
-              onClose={handleClose}
-              severity="error"
-              sx={{ width: "100%" }}
-            >
-              Please Enter Email and Password!
-            </Alert>
-          </Snackbar>
           <Typography
             variant="h4"
             display="flex"
@@ -177,7 +157,21 @@ const SignIn = () => {
             <Link href="/Reset" color="primary" underline="always">
               Forgot Password?
             </Link>
-            <Button variant="contained" onClick={() => handeleSumit()}>
+            <Button variant="contained" onClick={handeleSumit}>
+              <Toaster
+                toastOptions={{
+                  success: {
+                    style: {
+                      color: "green",
+                    },
+                  },
+                  error: {
+                    style: {
+                      color: "red",
+                    },
+                  },
+                }}
+              />
               SIGN IN
             </Button>
           </Box>
