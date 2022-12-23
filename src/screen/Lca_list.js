@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { Button, Grid } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import usePagination from "@mui/material/usePagination";
-import TablePagination from "@mui/material/TablePagination";
+import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Button, Grid } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import usePagination from "@mui/material/usePagination";
+import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -186,14 +187,18 @@ const LcaList = () => {
             <Typography variant="h6" color="primary" component="div">
               LCA REQUESTS
             </Typography>
-            <Button href="/LcaEdit" variant="contained">
-              ADD NEW
-            </Button>
+            <Box>
+              <Button href="/LcaEdit" variant="contained" sx={{marginRight:"10px"}}>
+                ADD NEW
+              </Button>
+              <Button href="/" variant="contained" startIcon={<LogoutIcon />}>Exit</Button>
+            
+            </Box>
           </Box>
         </AppBar>
 
-        <Box padding={4}>
-          <TableContainer component={Paper} sx={{ height: "500px" }}>
+        <Box padding={4} sx={{ marginBottom: "10px" }}>
+          <TableContainer component={Paper} sx={{ height: "350px" }}>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
@@ -313,84 +318,100 @@ const LcaList = () => {
               </TableBody>
             </Table>
           </TableContainer>
-
-          <Grid container>
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box
-                display="flex"
-                direction="row"
-                justifyContent="flex-start"
-                mt={2}
-              >
-                <StylePagination
-                  rowsPerPageOptions={[5, 10, 15]}
-                  component="div"
-                  count={data?.length}
-                  rowsPerPage={rowsPerPage}
-                  page={myPage}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </Box>
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={6} lg={6}>
-              <Box
-                display="flex"
-                direction="row"
-                justifyContent="flex-end"
-                mt={2}
-              >
-                <List>
-                  {items.map(({ page, type, selected }, index) => {
-                    let children = null;
-
-                    if (type === "start-ellipsis" || type === "end-ellipsis") {
-                      children = ".....";
-                    } else if (type === "page") {
-                      children = (
-                        <Button
-                          size="small"
-                          variant={
-                            myPage == page - 1 ? "contained" : "outlined"
-                          }
-                          type="button"
-                          onClick={() => {
-                            setPage(page - 1);
-                          }}
-                          style={{
-                            fontWeight: selected ? "bold" : undefined,
-                          }}
-                        >
-                          {page}
-                        </Button>
-                      );
-                    } else {
-                      children = (
-                        <Button
-                          variant="outlined"
-                          type="button"
-                          size="small"
-                          onClick={() => {
-                            type == "next" ? nextBtn() : preBtn();
-                          }}
-                        >
-                          {type}
-                        </Button>
-                      );
-                    }
-                    return (
-                      <Typography variant="subtitle1" key={index}>
-                        {" "}
-                        {children}
-                      </Typography>
-                    );
-                  })}
-                </List>
-              </Box>
-            </Grid>
-          </Grid>
         </Box>
+
+        <Grid
+          container
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            width: "100%",
+            backgroundColor: "white",
+            padding: "0 36px",
+          }}
+        >
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <Box
+              direction="row"
+              display="flex"
+              justifyContent={{
+                lg: "flex-start",
+                md: "flex-start",
+                sm: "flex-start",
+                xs: "center",
+              }}
+              mt={2}
+            >
+              <StylePagination
+                rowsPerPageOptions={[5, 10, 15]}
+                component="div"
+                count={data?.length}
+                rowsPerPage={rowsPerPage}
+                page={myPage}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <Box
+              display="flex"
+              direction="row"
+              justifyContent={{
+                lg: "flex-end",
+                md: "flex-end",
+                sm: "flex-end",
+                xs: "center",
+              }}
+              mt={2}
+            >
+              <List>
+                {items.map(({ page, type, selected }, index) => {
+                  let children = null;
+
+                  if (type === "start-ellipsis" || type === "end-ellipsis") {
+                    children = ".....";
+                  } else if (type === "page") {
+                    children = (
+                      <Button
+                        size="small"
+                        variant={myPage == page - 1 ? "contained" : "outlined"}
+                        type="button"
+                        onClick={() => {
+                          setPage(page - 1);
+                        }}
+                        style={{
+                          fontWeight: selected ? "bold" : undefined,
+                        }}
+                      >
+                        {page}
+                      </Button>
+                    );
+                  } else {
+                    children = (
+                      <Button
+                        variant="outlined"
+                        type="button"
+                        size="small"
+                        onClick={() => {
+                          type == "next" ? nextBtn() : preBtn();
+                        }}
+                      >
+                        {type}
+                      </Button>
+                    );
+                  }
+                  return (
+                    <Typography variant="subtitle1" key={index}>
+                      {" "}
+                      {children}
+                    </Typography>
+                  );
+                })}
+              </List>
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );

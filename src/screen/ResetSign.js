@@ -60,11 +60,11 @@ const SignIn = () => {
         justifyContent: "center",
         alignItems: "center",
         margin: "auto",
-        marginTop: "150px",
+        marginTop: "80px",
         padding: "10px",
         "& > :not(style)": {
           m: 1,
-          width: 500,
+          width: 450,
           height: "auto",
         },
       }}

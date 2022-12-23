@@ -1,5 +1,6 @@
+import DraftsIcon from "@mui/icons-material/Drafts";
+import LockIcon from "@mui/icons-material/Lock";
 import {
-  Alert,
   Box,
   Button,
   InputAdornment,
@@ -8,12 +9,10 @@ import {
   Stack,
   styled,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import { toast, Toaster } from "react-hot-toast";
-import LockIcon from "@mui/icons-material/Lock";
 import React, { useState } from "react";
+import { toast, Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const StyledText = styled(TextField)({
@@ -80,9 +79,12 @@ const SignIn = () => {
   };
 
   const handeleSumit = () => {
+    event.preventDefault();
     if (validateForm()) {
     }
   };
+
+  
 
   return (
     <Box
@@ -92,90 +94,97 @@ const SignIn = () => {
         justifyContent: "center",
         alignItems: "center",
         margin: "auto",
-        marginTop: "150px",
+        marginTop: "100px",
         padding: "10px",
         "& > :not(style)": {
           m: 1,
-          width: 500,
+          width: 450,
           height: "auto",
         },
       }}
     >
       <Paper elevation={3} sx={{ padding: "35px" }}>
-        <Stack>
-          <Typography
-            variant="h4"
-            display="flex"
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ marginBottom: "45px", color: "#456a70" }}
-          >
-            SIGN IN
-          </Typography>
-          <StyledText
-            helperText={data?.error?.email}
-            onChange={(e) => handeleChange("email", e.target.value)}
-            placeholder="Enter Email Id"
-            type={"email"}
-            error={data?.error?.email ? true : false}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment
-                  position="start"
-                  sx={{ backgroundColor: "#D3DADD", padding: "28px 20px" }}
-                >
-                  <DraftsIcon sx={{ fontSize: "1.3rem" }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <StyledText
-            helperText={data?.error?.password}
-            onChange={(e) => handeleChange("password", e.target.value)}
-            placeholder="Enter Password"
-            name="password"
-            error={data?.error?.password ? true : false}
-            type={"password"}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment
-                  position="start"
-                  sx={{ backgroundColor: "#D3DADD", padding: "27px 20px" }}
-                >
-                  <LockIcon sx={{ fontSize: "1.3rem" }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Box
-            sx={{ marginTop: "15px" }}
-            display="flex"
-            direction="row"
-            justifyContent="space-between"
-          >
-            <Link href="/Reset" color="primary" underline="always">
-              Forgot Password?
-            </Link>
-            <Button variant="contained" onClick={handeleSumit}>
-              <Toaster
-                toastOptions={{
-                  success: {
-                    style: {
-                      color: "green",
-                    },
-                  },
-                  error: {
-                    style: {
-                      color: "red",
-                    },
-                  },
-                }}
-              />
+        <form>
+          <Stack>
+            <Typography
+              variant="h4"
+              display="flex"
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ marginBottom: "45px", color: "#456a70" }}
+            >
               SIGN IN
-            </Button>
-          </Box>
-        </Stack>
+            </Typography>
+            <StyledText
+              helperText={data?.error?.email}
+              onChange={(e) => handeleChange("email", e.target.value)}
+              placeholder="Enter Email Id"
+              type={"email"}
+              error={data?.error?.email ? true : false}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment
+                    position="start"
+                    sx={{ backgroundColor: "#D3DADD", padding: "28px 20px" }}
+                  >
+                    <DraftsIcon sx={{ fontSize: "1.3rem" }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <StyledText
+              helperText={data?.error?.password}
+              onChange={(e) => handeleChange("password", e.target.value)}
+              placeholder="Enter Password"
+              name="password"
+              error={data?.error?.password ? true : false}
+              type={"password"}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment
+                    position="start"
+                    sx={{ backgroundColor: "#D3DADD", padding: "27px 20px" }}
+                  >
+                    <LockIcon sx={{ fontSize: "1.3rem" }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Box
+              sx={{ marginTop: "15px" }}
+              display="flex"
+              direction="row"
+              justifyContent="space-between"
+            >
+              <Link href="/Reset" color="primary" underline="always">
+                Forgot Password?
+              </Link>
+              <Button
+                variant="contained"
+                onClick={handeleSumit}
+                
+                type="submit"
+              >
+                <Toaster
+                  toastOptions={{
+                    success: {
+                      style: {
+                        color: "green",
+                      },
+                    },
+                    error: {
+                      style: {
+                        color: "red",
+                      },
+                    },
+                  }}
+                />
+                SIGN IN
+              </Button>
+            </Box>
+          </Stack>
+        </form>
       </Paper>
     </Box>
   );

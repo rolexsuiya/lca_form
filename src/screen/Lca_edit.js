@@ -128,6 +128,7 @@ const LcaEdit = () => {
 
   const validateForm = () => {
     var isValid = true;
+    let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const error = { ...data?.error };
     if (data?.clasfition?.length === 0 || data?.clasfition === null) {
       isValid = false;
@@ -163,6 +164,11 @@ const LcaEdit = () => {
       isValid = false;
       setOpen(true);
       error["empMail"] = true;
+    }
+    if (data?.empMail && regexEmail.test(data?.empMail) === false) {
+      isValid = false;
+      // toast.error("Please Enter Valid Email");
+      error.empMail = "Please Enter Valid Email";
     }
     if (data?.country?.length === 0 || data?.country === null) {
       isValid = false;
@@ -302,7 +308,11 @@ const LcaEdit = () => {
             <Box display="flex" direction="row" justifyContent="space-between">
               <StyleTypo color="secondary.contrastText">
                 LCA CLASIFICATION
+                <Typography color="error" variant="caption">
+                  &nbsp;*
+                </Typography>
               </StyleTypo>
+
               <InfoOutlinedIcon color="info" />
             </Box>
             <Autocomplete
@@ -323,7 +333,12 @@ const LcaEdit = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={4}>
             <Box display="flex" direction="row" justifyContent="space-between">
-              <StyleTypo color="secondary.contrastText">ROLE</StyleTypo>
+              <StyleTypo color="secondary.contrastText">
+                ROLE
+                <Typography color="error" variant="caption">
+                  &nbsp;*
+                </Typography>
+              </StyleTypo>
               <InfoOutlinedIcon color="info" />
             </Box>
             <Autocomplete
@@ -344,9 +359,14 @@ const LcaEdit = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4}>
             <Box display="flex" direction="row" justifyContent="space-between">
-              <StyleTypo color="secondary.contrastText">
-                NUMBER OF WORK LOCATIONS
-              </StyleTypo>
+              <Box display="flex" direction="row">
+                <StyleTypo color="secondary.contrastText">
+                  NUMBER OF WORK LOCATIONS
+                  <Typography color="error" variant="caption">
+                    &nbsp;*
+                  </Typography>
+                </StyleTypo>
+              </Box>
               <InfoOutlinedIcon color="info" />
             </Box>
             <Autocomplete
@@ -398,7 +418,7 @@ const LcaEdit = () => {
               sx={{ width: "100%" }}
               onChange={(e) => handeleChange("empNum", e.target.value)}
               error={data?.error?.empNum ? true : false}
-              type={"text"}
+              type="number"
               size="small"
               InputProps={{
                 name: "empNum",
@@ -456,11 +476,12 @@ const LcaEdit = () => {
             </Box>
             <StyledText
               value={data?.empMail}
+              helperText={data?.error?.empMail}
               placeholder="Enter Offical email ID"
               onChange={(e) => handeleChange("empMail", e.target.value)}
               error={data?.error?.empMail ? true : false}
               sx={{ width: "100%", color: "728691" }}
-              type={"text"}
+              type={"email"}
               size="small"
             />
           </Grid>
